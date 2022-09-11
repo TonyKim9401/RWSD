@@ -28,6 +28,22 @@ public class BankTransactionAnalyzerByProcessor {
 
         // 출력을 응집한 메소드
         collectSummary(bankStatementProcessor);
+
+
+        // 함수형 인터페이스로 구현한 필터를 적용시킴
+/*
+        final List<BankTransaction> transactions = bankStatementProcessor.findTransactions(new BankTransactionIsInFebruaryAndExpensive());
+        final BankStatementProcessor bankStatementProcessor2 = new BankStatementProcessor(transactions);
+*/
+
+        /*
+        *  lambda 표현식을 사용해 매번 인터페이스를 만들지 않아도 동일하게 처리 가능
+        * */
+        List<BankTransaction> transactions = bankStatementProcessor.findTransactions(bankTransaction -> bankTransaction.getDate().getMonth() == Month.FEBRUARY
+                && bankTransaction.getAmount() >= 1000);
+        final BankStatementProcessor bankStatementProcessor2 = new BankStatementProcessor(transactions);
+
+        collectSummary(bankStatementProcessor2);
     }
 
     private static void collectSummary(final BankStatementProcessor bankStatementProcessor){
